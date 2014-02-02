@@ -1,7 +1,5 @@
 import datetime
 import re
-import sys
-
 
 class Timelogs:
     def __init__(self, file):
@@ -67,20 +65,3 @@ class Timelogs:
                     print task
                 print
         print "Total (%d days): %.2f hours" % (len(keys), total)    
-
-
-def main(argv):
-    filenames = argv
-    # today = datetime.date.today()
-    # print today
-    for filename in filenames:
-        print 'processing %s' % filename
-        with open(filename, 'r') as timelogs_file:
-            timelogs = Timelogs(timelogs_file)
-            print '#######################################'
-            timelogs.pretty_print()
-            print '\n'*7
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
