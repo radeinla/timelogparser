@@ -32,8 +32,7 @@ class Timelogs:
         return self.line
 
     def process(self):
-        line = self.readline()
-        self.developer = line.split(': ')[1]
+        self.task = self.readline().strip()
 
         while True:
             line = self.readline()
@@ -59,7 +58,7 @@ class Timelogs:
     def pretty_print(self):
         total = 0
         keys = sorted(self.data.keys())
-        print "Developer: %s" % self.developer
+        print self.task
         for date in keys:
             log = self.data[date]
             total = total + log['total']
