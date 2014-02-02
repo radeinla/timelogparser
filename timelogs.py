@@ -3,12 +3,13 @@ import re
 import sys
 
 
-class TimelogReader:
+class Timelogs:
     def __init__(self, file):
         self.file = file
         self.linenumber = 0
         self.line = None
-        self.timelogs = {}
+        self.data = {}
+        self.process()
 
     def processing_error(self, error_message):
         return Exception('%s at line %d: %s' % (error_message, self.linenumber, self.line))
@@ -48,17 +49,17 @@ class TimelogReader:
                     raise self.processing_error('cannot parse date for header')
                 total = float(match.group(5))
                 key = datetime.datetime.strftime(date, '%Y-%b-%d')
-                if key in self.timelogs:
+                if key in self.data:
                     raise self.processing_error('duplicate date')
-                self.timelogs[key] = {'total': total, 'tasks': self.process_date()}
+                self.data[key] = {'total': total, 'tasks': self.process_date()}
             else:
                 raise self.processing_error('malformed header')
 
     def pretty_print(self):
         total = 0
-        keys = sorted(self.timelogs.keys())
+        keys = sorted(self.data.keys())
         for date in keys:
-            log = self.timelogs[date]
+            log = self.data[date]
             total = total + log['total']
             if log['total'] > 0:
                 print '%s: %.2f hours' % (date, log['total'])
@@ -75,10 +76,9 @@ def main(argv):
     for filename in filenames:
         print 'processing %s' % filename
         with open(filename, 'r') as timelogs_file:
-            timelog_reader = TimelogReader(timelogs_file)
-            timelog_reader.process()
+            timelogs = Timelogs(timelogs_file)
             print '#######################################'
-            timelog_reader.pretty_print()
+            timelogs.pretty_print()
             print '\n'*7
 
 
