@@ -8,7 +8,8 @@ parent_parser = argparse.ArgumentParser(description="Timelogs Processor", add_he
 parent_parser.add_argument('files', nargs='*', help='file sources', type=argparse.FileType('r'))
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(dest='subcommand')
-freshbooks_subparser = subparsers.add_parser('freshbooks', parents=[parent_parser])
+freshbooks_subparser = subparsers.add_parser('freshbooks', parents=[parent_parser], 
+    help='Parse, merge and send to freshbooks as draft invoice')
 freshbooks_subparser.add_argument('--endpoint', dest='endpoint',
     type=str, required=True, default=None,
     help='Freshbooks api endpoint')
@@ -17,13 +18,14 @@ freshbooks_subparser.add_argument('--token', dest='token',
     help='Freshbooks api token')
 freshbooks_subparser.add_argument('--client-id', dest='client_id', 
     type=int, required=True, default=None,
-    help='Freshbooks client for invoicing')
-files_subparser = subparsers.add_parser('parse', parents=[parent_parser])
+    help='Freshbooks client_id for invoicing')
+files_subparser = subparsers.add_parser('parse', parents=[parent_parser], 
+    help='Only parse and merge files for further processing')
 
 def send_to_freshbooks(employee_timelogs, client_id, freshbooks_client):
     print 'sending to freshbooks'
     client_response = freshbooks_client.client.get(client_id=client_id)
-    print 'sending to %s %s (%s)' % (
+    print 'creating invoice for %s %s (%s)' % (
         client_response.client.first_name, 
         client_response.client.last_name, 
         client_response.client.organization
