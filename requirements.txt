@@ -1,0 +1,3 @@
+distribute==0.6.24
+lxml==3.3.0
+refreshbooks==2.0

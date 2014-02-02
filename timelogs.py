@@ -15,7 +15,7 @@ class Timelogs:
     def process_date(self):
         tasks = []
         while True:
-            line = self.readline()
+            line = self.readline().strip()
             if line.strip() == '':
                 break
             else:
@@ -33,6 +33,7 @@ class Timelogs:
 
     def process(self):
         self.task = self.readline().strip()
+        self.rate = float(self.readline().strip())
 
         while True:
             line = self.readline()
