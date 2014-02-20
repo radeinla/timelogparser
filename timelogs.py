@@ -15,7 +15,7 @@ class Timelogs:
     def process_date(self):
         tasks = []
         while True:
-            line = self.readline().strip()
+            line = unicode(self.readline().strip())
             if line.strip() == '':
                 break
             else:
@@ -52,7 +52,12 @@ class Timelogs:
                 key = datetime.datetime.strftime(date, '%Y-%b-%d')
                 if key in self.data:
                     raise self.processing_error('duplicate date')
-                self.data[key] = {'total': total, 'tasks': self.process_date()}
+                try:
+                    tasks = self.process_date()
+                except UnicodeDecodeError:
+                    raise self.processing_error('non-unicode compatible character')
+                else:
+                    self.data[key] = {'total': total, 'tasks': tasks}
             else:
                 raise self.processing_error('malformed header')
 
