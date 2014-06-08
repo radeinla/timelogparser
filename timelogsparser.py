@@ -1,5 +1,7 @@
 import argparse
+import os
 import sys
+import anyconfig
 from refreshbooks import api
 from timelogs import Timelogs
 
@@ -11,10 +13,10 @@ subparsers = parser.add_subparsers(dest='subcommand')
 freshbooks_subparser = subparsers.add_parser('freshbooks', parents=[parent_parser], 
     help='Parse, merge and send to freshbooks as draft invoice')
 freshbooks_subparser.add_argument('--endpoint', dest='endpoint',
-    type=str, required=True, default=None,
+    type=str, required=False, default=None,
     help='Freshbooks api endpoint')
 freshbooks_subparser.add_argument('--token', dest='token', 
-    type=str, required=True, default=None,
+    type=str, required=False, default=None,
     help='Freshbooks api token')
 freshbooks_subparser.add_argument('--client-id', dest='client_id', 
     type=int, required=True, default=None,
@@ -64,9 +66,18 @@ def main(argv):
         t.pretty_print()
         print '############## END ##############'
     if args.subcommand == 'freshbooks':
+        home = os.path.expanduser('~')
+        config_path = os.path.join(home, '.timelogparser.json')
+        freshbooks_config = anyconfig.load([config_path], merge=anyconfig.MS_DICTS_AND_LISTS)
+        freshbooks_args = {'freshbooks': {}}
+        if args.endpoint:
+            freshbooks_args['freshbooks'].update({'endpoint': args.endpoint})
+        if args.token:
+            freshbooks_args['freshbooks'].update({'token': args.token})
+        freshbooks_config.update(freshbooks_args, anyconfig.MS_DICTS_AND_LISTS)
         if raw_input("send to freshbooks? ").lower().startswith('y'):
-            freshbooks_client = api.TokenClient(args.endpoint, 
-                args.token, 
+            freshbooks_client = api.TokenClient(freshbooks_config['freshbooks']['endpoint'], 
+                freshbooks_config['freshbooks']['token'], 
                 user_agent='github/radeinla/timelogparser')
             send_to_freshbooks(employee_timelogs, args.client_id, freshbooks_client)
 
