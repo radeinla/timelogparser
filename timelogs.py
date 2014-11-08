@@ -47,7 +47,11 @@ class Timelogs:
                 try:
                     date = datetime.datetime.strptime(match.group(1), '%b %d, %Y')
                 except ValueError:
-                    raise self.processing_error('cannot parse date for header')
+                    try:
+                        current_year = datetime.date.today().year
+                        date = datetime.datetime.strptime("%s, %d" % (match.group(1), current_year), '%b %d, %Y')
+                    except ValueError:
+                        raise self.processing_error('cannot parse date for header')
                 total = float(match.group(5))
                 key = datetime.datetime.strftime(date, '%Y-%b-%d')
                 if key in self.data:
