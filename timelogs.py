@@ -42,7 +42,7 @@ class Timelogs:
                 return
             if line.strip() == '':
                 continue
-            match = re.match('(\w+ \d+,?( \d+)?)(( - )|\s+)(\d+)( .*)?', self.line)
+            match = re.match('(\w+ \d+,?( \d+)?)(( - )|\s+)((\d+)(\.\d+)?)( .*)?', self.line)
             if match:
                 try:
                     date = datetime.datetime.strptime(match.group(1), '%b %d, %Y')
