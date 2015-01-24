@@ -81,5 +81,8 @@ def main(argv):
                 user_agent='github/radeinla/timelogparser')
             send_to_freshbooks(employee_timelogs, args.client_id, freshbooks_client)
 
-if __name__ == "__main__":
+def script_main():
     main(sys.argv[1:])
+
+if __name__ == "__main__":
+    script_main()
