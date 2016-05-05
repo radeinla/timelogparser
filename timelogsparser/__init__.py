@@ -65,6 +65,10 @@ def main(argv):
         print '############# START #############'
         t.pretty_print()
         print '############## END ##############'
+    print '############ SUMMARRY #############'
+    for t in employee_timelogs:
+        t.print_summary()
+    print '############ END SUMMARRY #############'
     if args.subcommand == 'freshbooks':
         home = os.path.expanduser('~')
         config_path = os.path.join(home, '.timelogparser.json')
