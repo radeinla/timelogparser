@@ -78,3 +78,11 @@ class Timelogs:
                     print task
                 print
         print "Total (%d days): %.2f hours" % (len(keys), total)    
+
+    def print_summary(self):
+        print self.task
+        total = 0
+        for date in self.data.keys():
+            log = self.data[date]
+            total = total + log['total']
+        print "Total (%d days): %.2f hours" % (len(keys), total)
