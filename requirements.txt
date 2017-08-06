@@ -1,4 +1,4 @@
-anyconfig==0.0.3.12
-lxml==3.3.0
+anyconfig==0.3.0
+lxml==3.8.0
 refreshbooks==2.0
-requests==2.2.1
+requests==2.18.3
