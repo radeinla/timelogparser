@@ -77,7 +77,9 @@ class Timelogs:
                 for task in log['tasks']:
                     print task
                 print
-        print "Total (%d days): %.2f hours" % (len(keys), total)    
+                
+        total_cost = self.rate * log['total']
+        print "Total (%d days): %.2f hours (%.2f)" % (len(keys), total, total_cost)
 
     def print_summary(self):
         print self.task
