@@ -88,4 +88,5 @@ class Timelogs:
         for date in keys:
             log = self.data[date]
             total = total + log['total']
-        print "Total (%d days): %.2f hours" % (len(keys), total)
+        total_cost = self.rate * total
+        print "Total (%d days): %.2f hours (%.2f)" % (len(keys), total, total_cost)
