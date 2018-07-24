@@ -21,10 +21,13 @@ freshbooks_subparser.add_argument('--token', dest='token',
 freshbooks_subparser.add_argument('--client-id', dest='client_id', 
     type=int, required=True, default=None,
     help='Freshbooks client_id for invoicing')
+freshbooks_subparser.add_argument('--currency', dest='currency', 
+    type=str, required=False, default='USD',
+    help='Freshbooks client_id for invoicing')
 files_subparser = subparsers.add_parser('parse', parents=[parent_parser], 
     help='Only parse and merge files for further processing')
 
-def send_to_freshbooks(employee_timelogs, client_id, freshbooks_client):
+def send_to_freshbooks(employee_timelogs, client_id, freshbooks_client, currency):
     print 'sending to freshbooks'
     client_response = freshbooks_client.client.get(client_id=client_id)
     print 'creating invoice for %s %s (%s)' % (
@@ -48,7 +51,7 @@ def send_to_freshbooks(employee_timelogs, client_id, freshbooks_client):
         invoice = dict(
             client_id=client_id,
             status='draft',
-            currency_code='USD',
+            currency_code=currency,
             language='en',
             lines=lines
         )
@@ -83,7 +86,7 @@ def main(argv):
             freshbooks_client = api.TokenClient(freshbooks_config['freshbooks']['endpoint'], 
                 freshbooks_config['freshbooks']['token'], 
                 user_agent='github/radeinla/timelogparser')
-            send_to_freshbooks(employee_timelogs, args.client_id, freshbooks_client)
+            send_to_freshbooks(employee_timelogs, args.client_id, freshbooks_client, args.currency)
 
 def script_main():
     main(sys.argv[1:])
